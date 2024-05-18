@@ -66,6 +66,10 @@ pip install -r requirements.txt
 uvicorn BookApp:app --reload
 ```
 
+## Change the database
+
+To change the database update the string `DATABASE_URI` in `database_conn.py`. To use my database set `DATABASE_URI = "sqlite:///.books_database.db"`
+
 ## Known edge failure cases
 
 When adding a book to the database using the ISBN-13 number, the OpenLibrary API might not provide information about the ISBN-10 number. If a subsequent attempt is made to add another book with a missing ISBN-10 number, the application will crash with a 500 error. This occurs because the `isbn_10` column in the database has a unique constraint, and storing multiple entries with "" value in this column violates the uniqueness constraint.
