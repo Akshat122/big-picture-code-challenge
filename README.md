@@ -1,57 +1,79 @@
-# Big Picture Coding Challenge - Backend - Book Library API
+# Book Management API
 
-**To work on this challenge, please create a fork of it to your own github account**
+This is a RESTful API for managing books. It allows users to fetch book details by ISBN, save book details to the library, and list all books stored in the library.
 
-Our colleagues have amassed an impressive collection of books, leading to quite the bill and an unhappy boss. To keep things organized and to provide transparency into our library, we've decided to step in and help with software. Our solution: a sleek website where our intern can easily record books by their ISBN number, pulling in detailed information via an API.
+## Technologies Used
 
-**Your mission**: Build the backend to power this application.
+- Python
+- FastAPI
+- SQLAlchemy
+- SQLite
+- OpenLibrary API
 
-## Overview:
+## Features
 
-- Users (in this case, our intern) can enter the ISBN number of a book.
-- Our software will fetch the book's details from an external API and save it to our database.
-- The frontend will then display our entire library in a user-friendly manner.
+### ISBN Validation
 
-## Backend Specifications:
+The backend validates an ISBN number using a custom function.
 
-### Technology:
+### Fetch Book Details
 
-- Python (Any backend framework of your choice. E.g., Flask, Django, FastAPI, etc.)
-- ORM + Database: Feel free to choose what you're comfortable with (SQLite, PostgreSQL, MongoDB, etc.)
+The backend fetches book details like author, title, summary, and cover URL from the OpenLibrary API. Both ISBN_10 and ISBN_13 can be used to find a book. 
 
-### Features:
+### Endpoints
 
-1. **ISBN Validation**:
-    - The backend should be able to validate an ISBN number.
-    - If the ISBN is not valid, it should send an appropriate response to the frontend.
+#### 1. Fetch Book Details by ISBN
 
-2. **Fetch Book Details**:
-    - The backend should get book details like author, title, summary, and cover URL from a third-party API.
-    - Hint: Check out [OpenLibrary's API](https://openlibrary.org/). It's free and provides detailed information on books by ISBN.
+- **Endpoint**: `GET /isbn/<isbn>`
+- **Description**: Returns book details including author, title, summary, and cover URL from OpenLibrary API and store it in the database.
+- **Request Parameters**: `isbn` (ISBN_10 or ISBN_13 number can be used )
+- **Response**: JSON with book details
 
-3. **Endpoints**:
+#### 2. Save Book Details to Library
 
-    - **Task 1**: Fetch Book Details by ISBN
+- **Endpoint**: `POST /books`
+- **Description**: Fetch the book details from OpenLibrary and then saves book details in the database.
+- **Request Body**: JSON with `isbn` (ISBN_10 or ISBN_13 number can be used )
+- **Response**: JSON with saved book details
 
-      `GET /isbn/<isbn>`:
-      - Returns a JSON including: author, title, summary, cover_url.
+#### 3. List All Books in Library
 
-    - **Task 2**: Save Book Details to our Library
+- **Endpoint**: `GET /books`
+- **Description**: Returns a list of all books stored in the library database.
+- **Response**: JSON array with book details
 
-      `POST /books` with body `JSON: {isbn: "ISBN_NUMBER_HERE"}`:
-      - This will save the book's details to our library database.
+## Setup Instructions
 
-    - **Task 3**: List All Books in our Library
+1. Clone the repository:
 
-      `GET /books`:
-      - Returns a list of all books stored in our library.
-      - Use a format, so the fronend can render all information from this one JSON
+```bash
+git clone https://github.com/your_username/book-management-api.git
+```
+2. Create a virtual environment
+```bash
+python3 -m venv env
+```
+3. activate the environment
+```bash
+source env/bin/activate
+```
+4. Installing the requirements
+```bash
+pip install -r requirements.txt
+```
+5. To run the application 
+```bash
+uvicorn BookApp:app --reload
+```
 
-## Documentation:
+## Known edge failure cases
 
-Please ensure that you document your code adequately. Proper commenting will not only help you in future modifications but will also assist any other developer who might be working with your code.
+When adding a book to the database using the ISBN-13 number, the OpenLibrary API might not provide information about the ISBN-10 number. If a subsequent attempt is made to add another book with a missing ISBN-10 number, the application will crash with a 500 error. This occurs because the `isbn_10` column in the database has a unique constraint, and storing multiple entries with "" value in this column violates the uniqueness constraint.
 
-## Installation
-*Please tell us how to get your code running. Do we need to install anything? Is there a database we need to create? Please provide all necessary instructions. After following these instructions the code should run!*
+solutions : Don't store the book in the database until both ISBN number are available. use multiple APIs to get the missing ISBN.
 
-Good luck, and may your code run without bugs!
+ISBN_13 : 9781612681139 
+Book: Rich Dad Poor Dad
+
+ISBN_13 : 9781785042188
+Book : Surrounded by Idiots
