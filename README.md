@@ -47,7 +47,7 @@ The backend fetches book details like author, title, summary, and cover URL from
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/your_username/book-management-api.git
+git clone https://github.com/Akshat122/big-picture-code-challenge.git
 ```
 2. Create a virtual environment
 ```bash
