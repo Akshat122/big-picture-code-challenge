@@ -18,7 +18,7 @@ The backend validates an ISBN number using a custom function.
 
 ### Fetch Book Details
 
-The backend fetches book details like author, title, summary, and cover URL from the OpenLibrary API. Both ISBN_10 and ISBN_13 can be used to find a book. 
+The backend fetches book details like author, title, summary, and cover URL using OpenLibrary API. Both ISBN_10 and ISBN_13 can be used to find a book. 
 
 ### Endpoints
 
